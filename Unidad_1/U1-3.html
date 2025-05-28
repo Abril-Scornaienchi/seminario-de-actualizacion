@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+</body>
+
+<script>
+    // Objeto que simula los usuarios registrados con sus contraseñas
+    // NOTA: Para que el usuario 'admin' cumpla el requisito, su contraseña debe ser 'ClaveSegura!@#'
+    const usuariosRegistrados = {
+        "usuario1": "pass123",        // Esta NO cumple los requisitos de seguridad
+        "admin": "ClaveSegura!@#"     // Esta SÍ cumple los requisitos de seguridad
+    };
+
+    let intentosFallidos = 0;
+    const MAX_INTENTOS = 3;
+    const mensajeElemento = document.getElementById("mensaje"); // Obtiene el elemento del HTML
+
+    /**
+     * Función para validar la complejidad de la contraseña.
+     * Requisitos: 8-16 caracteres, 1+ mayúscula, 2+ símbolos especiales.
+     */
+    function esContrasenaSegura(password) {
+        // Verifica la longitud (8 a 16 caracteres)
+        if (password.length < 8 || password.length > 16) return false;
+        // Verifica al menos una mayúscula
+        if (!/[A-Z]/.test(password)) return false;
+        // Verifica al menos dos símbolos especiales (no letras ni números)
+        const simbolos = (password.match(/[^a-zA-Z0-9]/g) || []).length;
+        if (simbolos < 2) return false;
+        return true; // Si todo lo anterior es válido, la contraseña es segura
+    }
+
+    /**
+     * Función principal para manejar el inicio de sesión.
+     */
+    function iniciarSesion() {
+        if (intentosFallidos >= MAX_INTENTOS) {
+            mensajeElemento.textContent = "Usuario bloqueado. Contacte al administrador.";
+            return;
+        }
+
+        const usuarioIngresado = prompt("Ingrese su usuario:");
+        const contrasenaIngresada = prompt("Ingrese su contraseña:");
+
+        if (usuariosRegistrados[usuarioIngresado] === contrasenaIngresada) {
+            // Credenciales correctas. Ahora validamos la seguridad de la contraseña.
+            if (esContrasenaSegura(contrasenaIngresada)) {
+                mensajeElemento.textContent = `¡Bienvenido/a ${usuarioIngresado}!`;
+                intentosFallidos = 0; // Reinicia intentos
+            } else {
+                // Contraseña correcta, pero no cumple con los estándares de seguridad
+                mensajeElemento.textContent = `¡Bienvenido/a ${usuarioIngresado}! Sin embargo, su contraseña no es segura. Le recomendamos cambiarla.`;
+                intentosFallidos = 0; // Se considera un inicio de sesión válido, no un intento fallido
+            }
+        } else {
+            // Credenciales incorrectas
+            intentosFallidos++;
+            if (intentosFallidos >= MAX_INTENTOS) {
+                mensajeElemento.textContent = "Usuario bloqueado. Contacte al administrador.";
+            } else {
+                mensajeElemento.textContent = "Usuario y/o contraseña incorrecta.";
+            }
+        }
+    }
+
+    // Inicia el proceso de login cuando la página carga
+    window.onload = iniciarSesion;
+</script>
+</html>
