@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+</body>
+
+<script>
+    // Usuarios y contraseñas de ejemplo (en un entorno real, esto vendría de una base de datos)
+    const usuariosRegistrados = {
+        "cliente1": "pass123",
+        "cliente2": "abc456"
+    };
+
+    let intentosFallidos = 0;
+    const maxIntentos = 3;
+    const mensajeElemento = document.getElementById("mensaje");
+
+    function iniciarSesion() {
+        if (intentosFallidos >= maxIntentos) {
+            mensajeElemento.textContent = "Usuario bloqueado. Contacte al administrador.";
+            return; // Salir de la función si el usuario está bloqueado
+        }
+
+        const usuario = prompt("Ingrese su usuario:");
+        const contrasena = prompt("Ingrese su contraseña:");
+
+        // Verificar credenciales
+        if (usuariosRegistrados[usuario] === contrasena) {
+            mensajeElemento.textContent = `¡Bienvenido/a ${usuario}!`;
+            intentosFallidos = 0; // Reiniciar intentos si el acceso es exitoso
+        } else {
+            intentosFallidos++;
+            if (intentosFallidos >= maxIntentos) {
+                mensajeElemento.textContent = "Usuario bloqueado. Contacte al administrador.";
+            } else {
+                mensajeElemento.textContent = "Usuario y/o contraseña incorrecta.";
+            }
+        }
+    }
+
+    // Llamar a la función de inicio de sesión al cargar la página
+     window.onload = iniciarSesion;
+</script>
+
+</html>
