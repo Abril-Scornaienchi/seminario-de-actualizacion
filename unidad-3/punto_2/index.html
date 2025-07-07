@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WebComponents Ejercicios</title>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <style>
+            /* Estilos básicos para la calculadora (del ejercicio anterior) */
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                flex-direction: column; /* Cambiado a columna para apilar componentes */
+                align-items: center;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+                padding: 20px; /* Un poco de padding */
+            }
+            /* Estilos de la calculadora */
+            x-calculator {
+                display: block;
+                border: 1px solid #ccc;
+                padding: 15px;
+                border-radius: 8px;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                margin-bottom: 30px; /* Espacio entre componentes */
+            }
+            x-calculator input {
+                width: calc(100% - 20px);
+                margin-bottom: 10px;
+                padding: 10px;
+                font-size: 1.5em;
+                text-align: right;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+            x-calculator button {
+                width: 50px;
+                height: 50px;
+                margin: 5px;
+                font-size: 1.2em;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                background-color: #e0e0e0;
+                transition: background-color 0.2s;
+            }
+            x-calculator button:hover {
+                background-color: #d0d0d0;
+            }
+            x-calculator .operator-btn {
+                background-color: #ff9500;
+                color: white;
+            }
+            x-calculator .operator-btn:hover {
+                background-color: #e08500;
+            }
+            x-calculator .equals-btn {
+                background-color: #4CAF50;
+                color: white;
+            }
+            x-calculator .equals-btn:hover {
+                background-color: #45a049;
+            }
+            x-calculator .number-row {
+                display: flex;
+                justify-content: center;
+            }
+            x-calculator .clear-btn {
+                background-color: #f44336;
+                color: white;
+            }
+            x-calculator .clear-btn:hover {
+                background-color: #d32f2f;
+            }
+
+            /* Estilos para los nuevos componentes (solo para espaciado) */
+            login-form {
+                margin-bottom: 30px;
+                display: block; /* Asegura que ocupe su propio espacio */
+            }
+            pricing-panel {
+                 margin-bottom: 30px;
+                 display: block;
+                 width: 100%; /* Para que los planes puedan distribuirse */
+                 max-width: 900px; /* Un máximo para que no se extienda demasiado */
+            }
+        </style>
+    </head>
+    <body>
+        <script type="module" src="main.js"></script>
+    </body>
+</html>
