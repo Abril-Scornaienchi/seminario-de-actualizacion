@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistencia con SessionStorage</title>
+</head>
+<body>
+    <h1>SessionStorage</h1>
+
+    <h2>SessionStorage</h2>
+    <input type="text" id="sessionInput" placeholder="Escribe algo para sessionStorage">
+    <button onclick="saveToSessionStorage()">Guardar en SessionStorage</button>
+    <button onclick="retrieveFromSessionStorage()">Recuperar de SessionStorage</button>
+    <button onclick="clearSessionStorage()">Limpiar SessionStorage</button>
+    <p>Valor en SessionStorage: <span id="sessionValue"></span></p>
+
+    <script>
+        function saveToSessionStorage() {
+            const input = document.getElementById('sessionInput').value;
+            sessionStorage.setItem('miDatoSession', input);
+            alert('Dato guardado en sessionStorage.');
+            document.getElementById('sessionInput').value = '';
+            retrieveFromSessionStorage();
+        }
+
+        function retrieveFromSessionStorage() {
+            const data = sessionStorage.getItem('miDatoSession');
+            document.getElementById('sessionValue').textContent = data ? data : 'Ningún dato';
+        }
+
+        function clearSessionStorage() {
+            sessionStorage.clear();
+            alert('SessionStorage limpiado.');
+            retrieveFromSessionStorage();
+        }
+
+        window.onload = () => {
+            retrieveFromSessionStorage();
+        };
+    </script>
+</body>
+</html>

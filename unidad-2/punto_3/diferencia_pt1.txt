@@ -1,0 +1,3 @@
+localStorage: Guarda datos que se quedan siempre, aunque cierres el navegador o abras otras pestañas.
+sessionStorage: Guarda datos solo para la pestaña actual y se borran cuando la cerrás.
+IndexedDB: Es una base de datos que puede guardar muchos datos, de cualquier tipo.

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistencia con IndexedDB</title>
+</head>
+<body>
+    <h1>IndexedDB</h1>
+
+    <h2>Gestión de Usuarios</h2>
+    <label for="userId">ID de Usuario:</label>
+    <input type="number" id="userId" placeholder="Ej: 1">
+    <br>
+    <label for="userName">Nombre de Usuario:</label>
+    <input type="text" id="userName" placeholder="Ej: Juan Perez">
+    <br>
+    <button onclick="addUser()">Agregar Usuario</button>
+    <button onclick="displayUsers()">Mostrar Usuarios</button>
+    <button onclick="clearAllUsers()">Borrar Todos los Usuarios</button>
+
+    <h3>Usuarios Almacenados:</h3>
+    <ul id="userList"></ul>
+
+    <script>
+        let dbInstance = null;
+        const DB_NAME = "DatabaseExample";
+        const DB_VERSION = 1;
+        const STORE_NAME = "user";
+
+        function openDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = (event) => {
+                    console.error("Database Connection Error:", event.target.errorCode, event.target.error);
+                    reject("Error al abrir la base de datos.");
+                };
+
+                request.onsuccess = (event) => {
+                    dbInstance = event.target.result;
+                    console.log("Database is ready");
+                    resolve();
+                };
+
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        db.createObjectStore(STORE_NAME, { keyPath: "id" });
+                        console.log(`Object store '${STORE_NAME}' created/upgraded.`);
+                    }
+                };
+            });
+        }
+
+        async function addUser() {
+            if (!dbInstance) {
+                console.error("Database not initialized yet (addUser)");
+                alert("La base de datos no está inicializada. Intenta recargar la página.");
+                return;
+            }
+
+            const userId = document.getElementById('userId').value;
+            const userName = document.getElementById('userName').value;
+
+            if (!userId || !userName) {
+                alert("Por favor, introduce un ID y un nombre de usuario.");
+                return;
+            }
+
+            const newUser = { id: parseInt(userId), name: userName };
+
+            const transaction = dbInstance.transaction([STORE_NAME], "readwrite");
+            const store = transaction.objectStore(STORE_NAME);
+
+            transaction.oncomplete = () => {
+                console.log("User added successfully");
+                alert("Usuario agregado con éxito!");
+                document.getElementById('userId').value = '';
+                document.getElementById('userName').value = '';
+                displayUsers();
+            };
+
+            transaction.onerror = (event) => {
+                const error = event.target.error;
+                console.error("Cannot add user:", error);
+                if (error && error.name === 'ConstraintError') {
+                    alert(`Error: El ID ${newUser.id} ya existe. Por favor, usa un ID diferente.`);
+                } else {
+                    alert(`Error al agregar usuario: ${error}`);
+                }
+            };
+
+            transaction.onabort = () => {
+                console.log("User add operation aborted/cancelled");
+                alert("Operación de agregar usuario abortada.");
+            };
+
+            try {
+                store.add(newUser);
+            } catch (e) {
+                console.error("Error síncrono al intentar agregar usuario:", e);
+                alert(`Error inesperado: ${e.message}`);
+            }
+        }
+
+        async function displayUsers() {
+            if (!dbInstance) {
+                console.error("Database not initialized yet (displayUsers)");
+                await openDatabase();
+            }
+
+            const transaction = dbInstance.transaction([STORE_NAME], "readonly");
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll();
+
+            request.onsuccess = (event) => {
+                const users = event.target.result;
+                const userList = document.getElementById("userList");
+                userList.innerHTML = "";
+
+                if (users.length === 0) {
+                    userList.innerHTML = "<li>No hay usuarios almacenados.</li>";
+                    return;
+                }
+
+                users.forEach(user => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `ID: ${user.id}, Nombre: ${user.name}`;
+                    userList.appendChild(listItem);
+                });
+            };
+
+            request.onerror = (event) => {
+                console.error("Error retrieving users:", event.target.errorCode, event.target.error);
+                alert(`Error al recuperar usuarios: ${event.target.error}`);
+            };
+        }
+
+        async function clearAllUsers() {
+            if (!dbInstance) {
+                console.error("Database not initialized yet (clearAllUsers)");
+                alert("La base de datos no está inicializada. Intenta recargar la página.");
+                return;
+            }
+
+            const transaction = dbInstance.transaction([STORE_NAME], "readwrite");
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.clear();
+
+            request.onsuccess = () => {
+                alert("Todos los usuarios han sido borrados.");
+                displayUsers();
+            };
+
+            request.onerror = (event) => {
+                console.error("Error clearing users:", event.target.errorCode, event.target.error);
+                alert(`Error al borrar usuarios: ${event.target.error}`);
+            };
+        }
+
+        window.onload = async () => {
+            try {
+                await openDatabase();
+                displayUsers();
+            } catch (error) {
+                console.error("Failed to initialize database on load:", error);
+                alert("No se pudo iniciar la base de datos. Por favor, revisa la consola para más detalles.");
+            }
+        };
+    </script>
+</body>
+</html>

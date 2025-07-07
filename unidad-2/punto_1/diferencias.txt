@@ -1,0 +1,3 @@
+localStorage los datos persisten aunque recargues la página, la cierres o vulevas a abrir el navegador.
+
+sessionStorage los datos se eliminan al cerrar la ventana o el navegador. Persisten al recargar la pestaña.

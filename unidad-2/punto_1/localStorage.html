@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistencia con LocalStorage</title>
+</head>
+<body>
+    <h1>LocalStorage</h1>
+
+    <h2>LocalStorage</h2>
+    <input type="text" id="localInput" placeholder="Escribe algo para localStorage">
+    <button onclick="saveToLocalStorage()">Guardar en LocalStorage</button>
+    <button onclick="retrieveFromLocalStorage()">Recuperar de LocalStorage</button>
+    <button onclick="clearLocalStorage()">Limpiar LocalStorage</button>
+    <p>Valor en LocalStorage: <span id="localValue"></span></p>
+
+    <script>
+        function saveToLocalStorage() {
+            const input = document.getElementById('localInput').value;
+            localStorage.setItem('miDatoLocal', input);
+            alert('Dato guardado en localStorage.');
+            document.getElementById('localInput').value = '';
+            retrieveFromLocalStorage();
+        }
+
+        function retrieveFromLocalStorage() {
+            const data = localStorage.getItem('miDatoLocal');
+            document.getElementById('localValue').textContent = data ? data : 'Ningún dato';
+        }
+
+        function clearLocalStorage() {
+            localStorage.clear();
+            alert('LocalStorage limpiado.');
+            retrieveFromLocalStorage();
+        }
+
+        window.onload = () => {
+            retrieveFromLocalStorage();
+        };
+    </script>
+</body>
+</html>
