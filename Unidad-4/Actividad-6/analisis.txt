@@ -1,0 +1,15 @@
+1. Principio de Responsabilidad Única
+La clase SolicitudApiTabla hace todo: es la vista, la controladora de eventos y el cliente de datos (API).
+La lógica de datos debe ir aparte.
+
+2. Principio Abierto/Cerrado
+Si queremos usar otra API o cambiar la fuente de datos, estamos forzados a modificar directamente los métodos internos (efectuarSolicitud y mostrarDetallesModal).
+El componente no es flexible. No pueden añadir funcionalidad sin modificar su código fuente.
+
+3. Principio de Sustitución de Liskov
+
+4. Principio de Segregación de Interfaces
+Al tener toda la lógica de datos integrada, si otra parte del código quisiera solo el fetch de la lista, tendría que usar un objeto que también carga el modal y maneja la tabla.
+
+5. Principio de Inversión de Dependencias (DIP)
+El componente depende de una implementación concreta (la URL de la API de JSONPlaceholder).
