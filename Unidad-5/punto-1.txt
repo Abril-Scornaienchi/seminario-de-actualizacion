@@ -1,0 +1,374 @@
+A. IUserService
+
+# 1. GetAllUsers()
+Endpoint: /users
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN: -
+Estructura de datos OUT:
+[
+    {
+        "id": 1,
+        "name": "Juan",
+        "email": "juan@example.com"
+    } 
+]
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Internal Server Error"
+}
+
+
+# 2. GetUserById(int id)
+Endpoint: /users/{id}
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "id" : 7
+}
+Estructura de datos OUT:
+{
+    "id": 7,
+    "name": "Juan",
+    "email": "juan@example.com"
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "User not found"
+}
+
+
+# 3. CreateUser(const User & user)
+Endpoint: /users
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: Content-Type: application/json
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "name": "Jose",
+    "email": "jose@example.com"
+}
+Estructura de datos OUT:
+{
+    "id": 5
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Name or email required"
+}
+
+
+# 4. UpdateUser(int id, const User & user)
+Endpoint: /users/{id}
+Método HTTP: PUT
+Formato Serializacion: JSON
+Cabecera entrada: Content-Type: application/json
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "id": 7,
+    "name": "Juan Updated",
+    "email": "juan_new@example.com"
+}
+Estructura de datos OUT:
+{
+    "success": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "User not found"
+}
+
+
+# 5. DeleteUser(int id)
+Endpoint: /users/{id}
+Método HTTP: DELETE
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "id" : 7
+}
+Estructura de datos OUT:
+{
+    "success": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "User not found"
+}
+
+----------------------------------
+B. IProductCatalog
+
+# 1. SearchProducts(const std::string& keyword)
+Endpoint: /products/search
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "keyword" : "laptop"
+}
+Estructura de datos OUT:
+[
+    {
+        "id": 101,
+        "name": "compu Pro",
+        "price": 999.99
+    } 
+]
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Invalid keyword"
+}
+
+# 2. GetProductById(int id)
+Endpoint: /products/{id}
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "id" : 101
+}
+Estructura de datos OUT:
+{
+    "id": 101,
+    "name": "Laptop Pro",
+    "price": 999.99
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Product not found"
+}
+
+# 3. UpdateStock(int productId, int newStock)
+Endpoint: /products/{id}/stock
+Método HTTP: PATCH
+Formato Serializacion: JSON
+Cabecera entrada: Content-Type: application/json
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "productId": 101,
+    "newStock": 50
+}
+Estructura de datos OUT:
+{
+    "success": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Product not found"
+}
+
+----------------------------------
+C. IAnalyticsService
+
+# 1. TrackEvent(...)
+Endpoint: /events
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: Content-Type: application/json
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "eventName": "item_clicked",
+    "properties": {
+        "user_id": "123",
+        "page": "home"
+    }
+}
+Estructura de datos OUT:
+{
+    "success": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Invalid eventName"
+}
+
+# 2. GetEventCount(const std::string& eventName)
+Endpoint: /events/{eventName}/count
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "eventName" : "item_clicked"
+}
+Estructura de datos OUT:
+{
+    "eventName": "item_clicked",
+    "count": 150
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Internal Server Error"
+}
+
+# 3. GetTopEvents(int limit)
+Endpoint: /events/top
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "limit" : 10
+}
+Estructura de datos OUT:
+{
+    "item_clicked": 150,
+    "page_view": 90,
+    "checkout": 50
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Invalid limit value"
+}
+
+----------------------------------
+D. IFileStorage
+
+# 1. ListFiles(const std::string& directory)
+Endpoint: /files
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "directory" : "/home/user"
+}
+Estructura de datos OUT:
+[
+    "file1.txt",
+    "doc.pdf"
+]
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "Directory not found"
+}
+
+# 3. WriteFile(...)
+Endpoint: /files/{path}
+Método HTTP: PUT
+Formato Serializacion: JSON
+Cabecera entrada: Content-Type: text/plain
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "path" : "documentos/nuevo.txt",
+    "content": "Este es el nuevo contenido."
+}
+Estructura de datos OUT:
+{
+    "success": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "PermissionDeniedException: Permiso denegado"
+}
+
+# 4. DeleteFile(const std::string& path)
+Endpoint: /files/{path}
+Método HTTP: DELETE
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "path" : "documentos/reporte.txt"
+}
+Estructura de datos OUT:
+{
+    "success": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "FileNotFoundException: Archivo no encontrado"
+}
+
+----------------------------------
+E. IAuthService
+
+# 1. Login(const std::string& user, const std::string& password)
+Endpoint: /auth/login
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: Content-Type: application/json
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "user": "usuario123",
+    "password": "miPassword"
+}
+Estructura de datos OUT:
+{
+    "token": "xyz123abc456"
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "AuthException: Invalid credentials"
+}
+
+# 2. Logout(const std::string& token)
+Endpoint: /auth/logout
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: Authorization: Bearer <token>
+Cabecera salida: -
+Estructura de datos IN: -
+Estructura de datos OUT:
+{
+    "success": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "AuthException: Invalid token"
+}
+
+# 3. ValidateToken(const std::string& token)
+Endpoint: /auth/validate
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: Authorization: Bearer <token>
+Cabecera salida: -
+Estructura de datos IN: -
+Estructura de datos OUT:
+{
+    "valid": true
+}
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "AuthException: Token expired"
+}
